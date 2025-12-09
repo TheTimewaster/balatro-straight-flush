@@ -6,7 +6,7 @@ type UseCardTiltOptions = {
 }
 
 export default (
-  cardContainer: Readonly<ShallowRef<HTMLElement>>,
+  cardContainer: Readonly<ShallowRef<HTMLElement | null>>,
   { tiltRollModifier = 10 }: UseCardTiltOptions = {
     tiltRollModifier: 10,
   },

@@ -62,7 +62,7 @@ export default (
       isConsecutive = nextRank === currentRank + 1
     }
 
-    if (nextRank === CardRank.Ace) {
+    if (nextRank === CardRank.Ace && rankSortedHand.value[0] != null) {
       // special case: we have to validate low straights beginning with Ace
       // we look back at the first card to see if it's a 2
       if (rankSortedHand.value[0][1] === CardRank.Two) {
