@@ -1,6 +1,10 @@
 # balatro-straight-flush
 
-This template should help get you started developing with Vue 3 in Vite.
+A lil web app for checking whether your balatro hand is a straight or flush or both.
+
+App is live at: [Link](https://thetimewaster.github.io/balatro-straight-flush)
+
+# Development
 
 ## Recommended IDE Setup
 
@@ -9,7 +13,7 @@ This template should help get you started developing with Vue 3 in Vite.
 ## Recommended Browser Setup
 
 - Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) 
+  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
   - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
 - Firefox:
   - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
