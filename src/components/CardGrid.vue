@@ -25,7 +25,7 @@ const handleCardClicked = (suit: CardSuit, rank: CardRank) => {
     return
   }
 
-  playingHand.value.push([suit, rank])
+  playingHand.value = [...playingHand.value, [suit, rank]]
 }
 </script>
 

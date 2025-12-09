@@ -7,13 +7,21 @@
           :key="`${slot[0]}-${slot[1]}-${index}`"
           :suit="slot[0]"
           :rank="slot[1]"
+          :class="slotTransformClasses"
+          :style="{
+            ...slotTranformStyle(index),
+          }"
           @card-clicked="handleCardClicked(index)"
         />
 
         <li
-          class="aspect-2/3 bg-gray-300 rounded-lg border border-gray-400"
           v-else
+          class="aspect-2/3 bg-gray-300 rounded-lg border border-gray-400"
+          :class="slotTransformClasses"
           :key="`empty-slot-${index}`"
+          :style="{
+            ...slotTranformStyle(index),
+          }"
         ></li>
       </template>
     </ul>
@@ -38,8 +46,9 @@
 
 <script setup lang="ts">
 import type { PlayingHand } from '@/types'
-import PlayingCard from './PlayingCard.vue'
+import PlayingCard from '@/components/PlayingCard.vue'
 import { computed } from 'vue'
+import tw from '@/utils/tw'
 
 const playingHand = defineModel<PlayingHand>({ default: () => [] })
 
@@ -65,24 +74,29 @@ enum SortCriteria {
 }
 
 const sortBy = (criteria: SortCriteria) => {
-  const sortedHand = [...playingHand.value].sort((a, b) => {
+  const sortedHand = [...playingHand.value].sort(([suitA, rankA], [suitB, rankB]) => {
     if (criteria === SortCriteria.Suit) {
-      if (a[0] === b[0]) {
-        return a[1] - b[1]
+      if (suitA === suitB) {
+        return rankA - rankB
       }
-
-      return a[0] - b[0]
+      return suitA - suitB
     } else {
-      if (a[1] === b[1]) {
-        return a[0] - b[0]
+      if (rankA === rankB) {
+        return suitA - suitB
       }
-
-      return a[1] - b[1]
+      return rankA - rankB
     }
   })
 
   playingHand.value = sortedHand
 }
+
+const slotTransformClasses = tw`rotate-(--card-rotate) translate-y-(--card-translate-y) origin-top`
+
+const slotTranformStyle = (index: number) => ({
+  ['--card-rotate']: `${(index - 2) * 4}deg`,
+  ['--card-translate-y']: `${Math.abs(Math.pow(index - 2, 3)) * 1.5}px`,
+})
 </script>
 
 <style scoped></style>

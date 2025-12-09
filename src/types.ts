@@ -4,9 +4,11 @@ export enum CardSuit {
   Club = 2,
   Diamond = 3,
 }
+export enum LowAce {
+  Ace = 1,
+}
 
 export enum CardRank {
-  Ace = 1,
   Two = 2,
   Three = 3,
   Four = 4,
@@ -19,6 +21,8 @@ export enum CardRank {
   Jack = 11,
   Queen = 12,
   King = 13,
+  Ace = 14,
 }
 
-export type PlayingHand = Array<[CardSuit, CardRank]>
+export type PlayingCard = [CardSuit, CardRank | LowAce]
+export type PlayingHand = Array<PlayingCard>
