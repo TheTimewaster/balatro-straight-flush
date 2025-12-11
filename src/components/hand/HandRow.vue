@@ -16,7 +16,7 @@
 
         <li
           v-else
-          class="aspect-2/3 bg-gray-300 rounded-lg border border-gray-400"
+          class="aspect-2/3 bg-gray-300 rounded-lg border border-gray-400 w-20"
           :class="slotTransformClasses"
           :key="`empty-slot-${index}`"
           :style="{
@@ -45,10 +45,10 @@
 </template>
 
 <script setup lang="ts">
-import type { PlayingHand } from '@/types'
 import PlayingCard from '@/components/PlayingCard.vue'
-import { computed } from 'vue'
+import type { PlayingHand } from '@/types'
 import tw from '@/utils/tw'
+import { computed } from 'vue'
 
 const playingHand = defineModel<PlayingHand>({ default: () => [] })
 

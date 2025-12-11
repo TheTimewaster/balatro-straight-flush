@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import PlayingCard from './PlayingCard.vue'
 import { CardRank, CardSuit, type PlayingHand } from '../types'
+import PlayingCard from './PlayingCard.vue'
 
 const playingHand = defineModel<PlayingHand>({ default: () => [] })
 
@@ -30,14 +30,15 @@ const handleCardClicked = (suit: CardSuit, rank: CardRank) => {
 </script>
 
 <template>
-  <ul class="grid grid-rows-4 gap-4">
+  <ul class="grid grid-rows-4">
     <li v-for="suit in cardSuits" :key="suit">
-      <ul class="grid grid-cols-13 gap-4">
+      <ul class="grid grid-cols-13">
         <PlayingCard
           v-for="rank in cardRanks"
+          :key="`${suit}-${rank}`"
+          class="-ml-4 hover:z-10"
           :rank="rank as CardRank"
           :suit="suit as CardSuit"
-          :key="`${suit}-${rank}`"
           @card-clicked="handleCardClicked(suit as CardSuit, rank as CardRank)"
         />
       </ul>

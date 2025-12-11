@@ -4,10 +4,11 @@ import getSuitColor from '@/utils/getSuitColor'
 import getSuitSymbol from '@/utils/getSuitSymbol'
 import { computed, ref } from 'vue'
 import CardGrid from './components/CardGrid.vue'
+import useIsHandFlush from './components/composables/hands/useIsHandFlush'
+import useIsHandStraight from './components/composables/hands/useIsHandStraight'
 import useJokerState from './components/composables/useJokerState'
 import PlayingHandRow from './components/hand/HandRow.vue'
 import { CardSuit, type PlayingHand } from './types'
-import useIsHandStraight from './components/composables/hands/useIsHandStraight'
 
 const playingHand = ref<PlayingHand>([])
 
@@ -21,55 +22,22 @@ const isQualifyingForEvaluation = computed((): boolean => {
   }
 })
 
-const { isHandStraight, qualifyingStraightHand: qualifyingHand } = useIsHandStraight(
+const { isHandStraight, qualifyingStraightHand } = useIsHandStraight(
   playingHand,
   isQualifyingForEvaluation,
   isUsingFourFingers,
   isUsingShortcut,
 )
 
-const suitSortedHand = computed((): PlayingHand => {
-  return [...playingHand.value].sort((a, b) => a[0] - b[0])
-})
-const isHandFlush = computed(() => {
-  if (!isQualifyingForEvaluation.value) {
-    return false
-  }
-
-  const suitCardCount = new Map<CardSuit, number>()
-
-  playingHand.value.forEach(([suit]) => {
-    const currentCount = suitCardCount.get(suit) ?? 0
-    suitCardCount.set(suit, currentCount + 1)
-  })
-
-  if (isUsingSmearedJoker.value) {
-    const colorCount = Array(2).fill(0) // [black suits, red suits]
-    for (const [suit, count] of suitCardCount) {
-      if (suit === CardSuit.Spade || suit === CardSuit.Club) {
-        colorCount[0] += count
-
-        if (colorCount[0] >= 5 || (isUsingFourFingers.value && colorCount[0] >= 4)) {
-          return true
-        }
-      } else {
-        colorCount[1] += count
-
-        if (colorCount[1] >= 5 || (isUsingFourFingers.value && colorCount[1] >= 4)) {
-          return true
-        }
-      }
-    }
-  }
-
-  for (const [, count] of suitCardCount) {
-    if (count >= 5 || (isUsingFourFingers.value && count >= 4)) {
-      return true
-    }
-  }
-
-  return false
-})
+const {
+  isHandFlush,
+  suitSortedHand
+} = useIsHandFlush(
+  playingHand,
+  isQualifyingForEvaluation,
+  isUsingSmearedJoker,
+  isUsingFourFingers
+  )
 
 const handType = computed(() => {
   if (isHandFlush.value && isHandStraight.value) {
@@ -89,7 +57,7 @@ const handType = computed(() => {
 </script>
 
 <template>
-  <main class="max-w-4/5 mx-auto">
+  <main class="max-w-3/5 mx-auto my-8">
     <h1 class="text-center text-2xl font-bold">Balatro - Straight/Flush</h1>
     <p class="text-center">Is your playing hand a Straight, Flush even both?</p>
 
@@ -108,22 +76,22 @@ const handType = computed(() => {
 
     <section class="text-center">
       <h2 class="mt-8 text-xl font-bold">Your Playing Hand</h2>
-      <PlayingHandRow class="w-1/3 mx-auto mt-4" v-model="playingHand" />
+      <PlayingHandRow class="w-2/3 mx-auto mt-4" v-model="playingHand" />
       <p class="mt-4">Your playing hand is {{ handType }}</p>
       <p class="font-bold mt-4">Explanation</p>
       <template v-if="isHandStraight">
         <p>Your ranks:</p>
         <p>
-          <template v-for="([suit, rank], index) in qualifyingHand" :key="rank">
+          <template v-for="([suit, rank], index) in qualifyingStraightHand" :key="rank">
             <span class="font-bold text-lg tracking-tight" :class="[getSuitColor(suit)]">
               {{ getSuitSymbol(suit) }}
               {{ getRankLabel(rank) }}
             </span>
-            <template v-if="qualifyingHand[index + 1] != null">
+            <template v-if="qualifyingStraightHand[index + 1] != null">
               <span
                 class="font-bold"
                 :class="{
-                  ['text-green-400']: qualifyingHand[index + 1]?.[1] === rank + 2,
+                  ['text-green-400']: qualifyingStraightHand[index + 1]?.[1] === rank + 2,
                 }"
                 :key="`arrow-${index}`"
               >
