@@ -9,12 +9,15 @@
         '--tw-rotate-y': `rotateY(${tilt}deg)`,
         '--bg-url': `url('${BASE_URL}8BitDeck.png')`,
         '--card-rank': rank - 2,
-        // based on the asset, Spades is the last row
+        // based on the sprites, Spades is the last row
         '--card-suit': suit === CardSuit.Spade ? 3 : suit - 1,
-        // the factor to calculate background position is based on the asset layout
-        '--bg-position': 'calc((var(--card-rank) / 13) * ((1/12 * 100%) + 100%)) calc((var(--card-suit)/4) * ((1/3 * 100%) + 100%))',
-        '--bg-size': 'calc(13 * 100%) calc(4 * 100%)',
+        '--total-ranks': 13,
+        '--total-suits': 4,
+        // formular is rank or suit / Number of ranks or suit - 1 * 100%
+        '--bg-position': 'calc((var(--card-rank) / (var(--total-ranks) - 1)) * 100%) calc((var(--card-suit) / (var(--total-suits) - 1)) * 100%)',
+        '--bg-size': 'calc(var(--total-ranks) * 100%) calc(var(--total-suits) * 100%)',
       }"
+      :title="`Card: ${getRankLabelLong(rank)} of ${getSuitLabel(suit, true)}`"
       @click="emit('cardClicked')"
     >
       <!-- <div class="text-center text-lg absolute top-2 left-2 leading-4 font-bold">
@@ -39,12 +42,12 @@
 </template>
 
 <script setup lang="ts">
-import { CardRank, CardSuit } from '@/types'
-import getRankLabel from '@/utils/getRankLabel'
-import getSuitColor from '@/utils/getSuitColor'
-import getSuitSymbol from '@/utils/getSuitSymbol'
-import { computed, useTemplateRef } from 'vue'
-import useCardTiltRoll from './composables/useCardTiltRoll'
+import { CardRank, CardSuit } from '@/types';
+import getRankLabelLong from '@/utils/getRankLabelLong';
+import getSuitColor from '@/utils/getSuitColor';
+import getSuitLabel from '@/utils/getSuitLabel';
+import { computed, useTemplateRef } from 'vue';
+import useCardTiltRoll from './composables/useCardTiltRoll';
 
 const { suit, rank } = defineProps<{
   suit: CardSuit
@@ -54,10 +57,6 @@ const { suit, rank } = defineProps<{
 const emit = defineEmits<{
   (e: 'cardClicked'): void
 }>()
-
-const suitSymbol = computed(() => getSuitSymbol(suit))
-
-const rankLabel = computed(() => getRankLabel(rank))
 
 const cardColor = computed(() => getSuitColor(suit))
 

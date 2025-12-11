@@ -16,7 +16,7 @@
 
         <li
           v-else
-          class="aspect-2/3 bg-gray-300 rounded-lg border border-gray-400 w-20"
+          class="aspect-3/4 bg-gray-300 rounded-lg border border-gray-400 w-20"
           :class="slotTransformClasses"
           :key="`empty-slot-${index}`"
           :style="{
@@ -91,12 +91,25 @@ const sortBy = (criteria: SortCriteria) => {
   playingHand.value = sortedHand
 }
 
-const slotTransformClasses = tw`rotate-(--card-rotate) translate-y-(--card-translate-y) origin-top`
+const slotTransformClasses = tw`rotate-(--card-rotate) translate-y-(--card-translate-y) origin-(--transform-origin)`
 
-const slotTranformStyle = (index: number) => ({
-  ['--card-rotate']: `${(index - 2) * 4}deg`,
-  ['--card-translate-y']: `${Math.abs(Math.pow(index - 2, 3)) * 1.5}px`,
-})
+const slotTranformStyle = (index: number) => {
+  const offset = index - 2
+  const rotationStep = 5 // degrees
+  const rotation = offset * rotationStep
+
+  // Calculate Y translation to create a circular arc
+  // We simulate a large circle with radius R below the cards
+  const radius = 1000
+  const angleRad = (Math.abs(rotation) * Math.PI) / 180
+  const translateY = radius * (1 - Math.cos(angleRad))
+
+  return {
+    '--card-rotate': `${rotation}deg`,
+    '--card-translate-y': `${translateY}px`,
+    '--transform-origin': 'bottom center',
+  }
+}
 </script>
 
 <style scoped></style>
