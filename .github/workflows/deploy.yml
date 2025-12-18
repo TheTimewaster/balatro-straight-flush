@@ -20,11 +20,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # Single deploy job since we're just deploying
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  prepare:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -40,8 +36,20 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
+  build:
+    needs: prepare
+    runs-on: ubuntu-latest
+    steps:       
       - name: Build
         run: pnpm run build
+  # Single deploy job since we're just deploying
+  deploy:
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
