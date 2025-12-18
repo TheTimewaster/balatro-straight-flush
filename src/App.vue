@@ -8,11 +8,22 @@ import useIsHandFlush from './components/composables/hands/useIsHandFlush'
 import useIsHandStraight from './components/composables/hands/useIsHandStraight'
 import useJokerState from './components/composables/useJokerState'
 import PlayingHandRow from './components/hand/HandRow.vue'
+import JokerItem from './components/JokerItem.vue'
 import { CardSuit, type PlayingHand } from './types'
 
 const playingHand = ref<PlayingHand>([])
 
 const { isUsingFourFingers, isUsingShortcut, isUsingSmearedJoker } = useJokerState(playingHand)
+
+const toggleJoker = (jokerType: 'fourFingers' | 'shortcut' | 'smearedJoker') => {
+  if (jokerType === 'fourFingers') {
+    isUsingFourFingers.value = !isUsingFourFingers.value
+  } else if (jokerType === 'shortcut') {
+    isUsingShortcut.value = !isUsingShortcut.value
+  } else if (jokerType === 'smearedJoker') {
+    isUsingSmearedJoker.value = !isUsingSmearedJoker.value
+  }
+}
 
 const isQualifyingForEvaluation = computed((): boolean => {
   if (isUsingFourFingers.value) {
@@ -29,15 +40,12 @@ const { isHandStraight, qualifyingStraightHand } = useIsHandStraight(
   isUsingShortcut,
 )
 
-const {
-  isHandFlush,
-  suitSortedHand
-} = useIsHandFlush(
+const { isHandFlush, suitSortedHand } = useIsHandFlush(
   playingHand,
   isQualifyingForEvaluation,
   isUsingSmearedJoker,
-  isUsingFourFingers
-  )
+  isUsingFourFingers,
+)
 
 const handType = computed(() => {
   if (isHandFlush.value && isHandStraight.value) {
@@ -64,13 +72,31 @@ const handType = computed(() => {
     <section>
       <h2 class="text-center mt-8 text-xl font-bold">Your Jokers</h2>
       <div class="mt-4 flex gap-4 justify-center">
-        <input type="checkbox" id="Four Fingers" v-model="isUsingFourFingers" />
-        <label for="Four Fingers">Four Fingers</label>
+        <!-- four fingers -->
+        <JokerItem
+          identifier="FourFingers"
+          name="Four Fingers"
+          :joker-x="6"
+          :joker-y="6"
+          @click="toggleJoker('fourFingers')"
+        />
+        <!-- shortcut -->
+        <JokerItem
+          identifier="Shortcut"
+          name="Shortcut"
+          :joker-x="3"
+          :joker-y="12"
+          @click="toggleJoker('shortcut')"
+        />
 
-        <input type="checkbox" id="Shortcut" v-model="isUsingShortcut" />
-        <label for="Shortcut">Shortcut</label>
-        <input type="checkbox" id="Smeared Joker" v-model="isUsingSmearedJoker" />
-        <label for="Smeared Joker">Smeared Joker</label>
+        <!-- smeared joker -->
+        <JokerItem
+          identifier="SmearedJoker"
+          name="Smeared Joker"
+          :joker-x="4"
+          :joker-y="6"
+          @click="toggleJoker('smearedJoker')"
+        />
       </div>
     </section>
 
