@@ -1,6 +1,6 @@
 # balatro-straight-flush
 
-A lil web app for checking whether your balatro hand is a straight or flush or both.
+A lil web app for checking what your Balatro hand is.
 
 App is live at: [Link](https://thetimewaster.github.io/balatro-straight-flush)
 
