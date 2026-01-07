@@ -18,10 +18,10 @@
 </template>
 
 <script setup lang="ts">
-import JokerCard from './JokerCard.vue';
+import JokerCard from './JokerCard.vue'
 
 const isToggled = defineModel<boolean>({ default: false })
-const { jokerX, jokerY } = defineProps<{
+const { jokerX, jokerY, identifier } = defineProps<{
   identifier: string
   name: string
   jokerX: number

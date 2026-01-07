@@ -1,24 +1,12 @@
 <script setup lang="ts">
-import { CardRank, CardSuit, type PlayingHand } from '../types'
-import PlayingCard from './PlayingCard.vue'
+import { CardRank, CardSuit, type PlayingHand } from '../../../types'
+import PlayingCard from '@/components/PlayingCard.vue'
 
 const playingHand = defineModel<PlayingHand>({ default: () => [] })
 
-const cardSuits = Object.values(CardSuit).filter((s) => {
-  if (typeof s === 'number') {
-    return true
-  }
+const cardSuits = Object.values(CardSuit).filter((s) => typeof s === 'number')
 
-  return false
-})
-
-const cardRanks = Object.values(CardRank).filter((r) => {
-  if (typeof r === 'number') {
-    return true
-  }
-
-  return false
-})
+const cardRanks = Object.values(CardRank).filter((r) => typeof r === 'number')
 
 const handleCardClicked = (suit: CardSuit, rank: CardRank) => {
   if (playingHand.value.length >= 5) {

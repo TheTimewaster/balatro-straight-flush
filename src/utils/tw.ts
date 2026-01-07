@@ -1,3 +1,3 @@
 export default (strings: TemplateStringsArray) => {
-  return strings
+  return strings as unknown as string
 }

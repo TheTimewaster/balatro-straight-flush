@@ -26,3 +26,27 @@ export enum CardRank {
 
 export type PlayingCard = [CardSuit, CardRank | LowAce]
 export type PlayingHand = Array<PlayingCard>
+
+/**
+ * Poker hand types in increasing order of rank.
+ * Balatro has an extended ranking system, where deck manipulation allows you to unlock
+ * * Five of a Kind
+ * * Flush House
+ * * Flush Five
+ */
+export enum PokerHandType {
+  EmptyHand = -1,
+  HighCard = 0,
+  Pair = 1,
+  TwoPair = 2,
+  ThreeOfAKind = 3,
+  Straight = 4,
+  Flush = 5,
+  FullHouse = 6,
+  FourOfAKind = 7,
+  StraightFlush = 8,
+  RoyalFlush = 9,
+  FiveOfAKind = 10,
+  FlushHouse = 11,
+  FlushFive = 12,
+}

@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+import JokerStatePlugin from './plugins/JokerState'
 
-createApp(App).mount('#app')
+createApp(App).use(JokerStatePlugin).mount('#app')

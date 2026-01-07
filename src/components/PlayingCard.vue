@@ -1,5 +1,5 @@
 <template>
-  <li class="perspective-distant">
+  <li class="perspective-distant flex justify-center">
     <div
       ref="cardContainer"
       class="aspect-3/4 rounded-lg shadow-md border border-gray-300 hover:scale-110 transition-transform rotate-x-(--rotate-x) rotate-y-(--rotate-y) cursor-pointer relative w-20 bg-(image:--bg-url) bg-position-(--bg-position) bg-no-repeat bg-(color:white) [image-rendering:pixelated] bg-white bg-size-(--bg-size)"
@@ -14,7 +14,8 @@
         '--total-ranks': 13,
         '--total-suits': 4,
         // formular is rank or suit / Number of ranks or suit - 1 * 100%
-        '--bg-position': 'calc((var(--card-rank) / (var(--total-ranks) - 1)) * 100%) calc((var(--card-suit) / (var(--total-suits) - 1)) * 100%)',
+        '--bg-position':
+          'calc((var(--card-rank) / (var(--total-ranks) - 1)) * 100%) calc((var(--card-suit) / (var(--total-suits) - 1)) * 100%)',
         '--bg-size': 'calc(var(--total-ranks) * 100%) calc(var(--total-suits) * 100%)',
       }"
       :title="`Card: ${getRankLabelLong(rank)} of ${getSuitLabel(suit, true)}`"
@@ -42,12 +43,12 @@
 </template>
 
 <script setup lang="ts">
-import { CardRank, CardSuit } from '@/types';
-import getRankLabelLong from '@/utils/getRankLabelLong';
-import getSuitColor from '@/utils/getSuitColor';
-import getSuitLabel from '@/utils/getSuitLabel';
-import { computed, useTemplateRef } from 'vue';
-import useCardTiltRoll from './composables/useCardTiltRoll';
+import { CardRank, CardSuit } from '@/types'
+import getRankLabelLong from '@/utils/getRankLabelLong'
+import getSuitColor from '@/utils/getSuitColor'
+import getSuitLabel from '@/utils/getSuitLabel'
+import { computed, useTemplateRef } from 'vue'
+import useCardTiltRoll from './composables/useCardTiltRoll'
 
 const { suit, rank } = defineProps<{
   suit: CardSuit

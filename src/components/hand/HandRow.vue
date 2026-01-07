@@ -14,28 +14,28 @@
           @card-clicked="handleCardClicked(index)"
         />
 
-        <li
-          v-else
-          class="aspect-3/4 bg-gray-300 rounded-lg border border-gray-400 w-20"
-          :class="slotTransformClasses"
-          :key="`empty-slot-${index}`"
-          :style="{
-            ...slotTranformStyle(index),
-          }"
-        ></li>
+        <li v-else class="perspective-distant flex justify-center" :key="`empty-slot-${index}`">
+          <div
+            class="aspect-3/4 bg-gray-300 rounded-lg border border-gray-400 w-20"
+            :class="slotTransformClasses"
+            :style="{
+              ...slotTranformStyle(index),
+            }"
+          ></div>
+        </li>
       </template>
     </ul>
 
     <h3 class="text-center mt-4">Sort by</h3>
     <div class="flex gap-4 justify-center mt-4">
       <button
-        class="px-4 py-2 rounded-lg bg-gray-300 font-bold cursor-pointer hover:bg-gray-400 transition-colors"
+        class="px-4 py-2 rounded-lg bg-gray-300 font-bold cursor-pointer hover:bg-gray-400 transition-colors dark:text-indigo-950"
         @click="() => sortBy(SortCriteria.Suit)"
       >
         Suit
       </button>
       <button
-        class="px-4 py-2 rounded-lg bg-gray-300 font-bold cursor-pointer hover:bg-gray-400 transition-colors"
+        class="px-4 py-2 rounded-lg bg-gray-300 font-bold cursor-pointer hover:bg-gray-400 transition-colors dark:text-indigo-950"
         @click="() => sortBy(SortCriteria.Rank)"
       >
         Rank

@@ -1,23 +1,21 @@
 import { CardRank, type PlayingCard, type PlayingHand } from '@/types'
-import { computed, reactive, ref, toRefs, unref, watch, type MaybeRef } from 'vue'
+import { computed, reactive, toRefs, unref, watch, type MaybeRefOrGetter } from 'vue'
 
 export default (
-  playingHand: Readonly<MaybeRef<PlayingHand>>,
-  isQualifyingForEvaluation: Readonly<MaybeRef<boolean>>,
-  isUsingFourFingers: Readonly<MaybeRef<boolean>>,
-  isUsingShortcut: Readonly<MaybeRef<boolean>>,
+  playingHand: MaybeRefOrGetter<PlayingHand>,
+  isQualifyingForEvaluation: MaybeRefOrGetter<boolean>,
+  isUsingFourFingers: MaybeRefOrGetter<boolean>,
+  isUsingShortcut: MaybeRefOrGetter<boolean>,
 ) => {
   const rankSortedHand = computed<PlayingHand>(() => {
     const playingHandRaw = unref(playingHand)
-    return [...playingHandRaw].sort((a, b) => a[1] - b[1])
+    return [...(playingHandRaw as PlayingHand)].sort(([, rankA], [, rankB]) => rankA - rankB)
   })
 
   const state = reactive<{
-    rankSortedHand: PlayingHand
     qualifyingStraightHand: PlayingHand
     isHandStraight: boolean
   }>({
-    rankSortedHand: [],
     qualifyingStraightHand: [],
     isHandStraight: false,
   })
@@ -35,6 +33,7 @@ export default (
     isLowStraight = false,
   ) => {
     const [suit, currentRank] = rankSortedHand.value[currentCardIndex] as PlayingCard
+    const isUsingShortcutRaw = unref(isUsingShortcut)
 
     // end of recursion
     if (currentCardIndex === lastCardIndex - 1) {
@@ -56,7 +55,7 @@ export default (
     const [, nextRank] = rankSortedHand.value[currentCardIndex + 1] as PlayingCard
 
     let isConsecutive = false
-    if (unref(isUsingShortcut)) {
+    if (isUsingShortcutRaw) {
       isConsecutive = nextRank === currentRank + 1 || nextRank === currentRank + 2
     } else {
       isConsecutive = nextRank === currentRank + 1
@@ -72,7 +71,7 @@ export default (
       }
 
       // special case: when using shortcut, after Ace we can consider 3 as consecutive to Ace
-      if (unref(isUsingShortcut) && rankSortedHand.value[0][1] === CardRank.Three) {
+      if (isUsingShortcutRaw && rankSortedHand.value[0][1] === CardRank.Three) {
         state.qualifyingStraightHand.push([suit, currentRank])
 
         return evaluateCardRank(currentCardIndex + 1, lastCardIndex, true)
@@ -92,13 +91,15 @@ export default (
   watch([rankSortedHand, isQualifyingForEvaluation, isUsingFourFingers, isUsingShortcut], () => {
     state.isHandStraight = false
     state.qualifyingStraightHand = []
+    const isQualifyingForEvaluationRaw = unref(isQualifyingForEvaluation)
+    const isUsingFourFingersRaw = unref(isUsingFourFingers)
 
-    if (!unref(isQualifyingForEvaluation)) {
+    if (!isQualifyingForEvaluationRaw) {
       return
     }
 
     // when using four fingers, we have to consider that only 4 cards are needed
-    if (unref(isUsingFourFingers)) {
+    if (isUsingFourFingersRaw) {
       // but if we have 5 cards, we need to check both possibilities
       // start from 0 to 4, or start from 1 to 5
       if (evaluateCardRank(0, 4)) {
@@ -115,5 +116,6 @@ export default (
 
   return {
     ...toRefs(state),
+    rankSortedHand,
   }
 }

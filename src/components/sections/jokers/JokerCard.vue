@@ -18,8 +18,8 @@
 </template>
 
 <script setup lang="ts">
-import { useTemplateRef } from 'vue';
-import useCardTiltRoll from './composables/useCardTiltRoll';
+import { useTemplateRef } from 'vue'
+import useCardTiltRoll from '@/components/composables/useCardTiltRoll'
 const JOKER_SPRITE_COLUMNS = 10
 const JOKER_SPRITE_ROWS = 16
 const { jokerX, jokerY } = defineProps<{

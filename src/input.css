@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @font-face {
   font-family: 'm6x11';
   src: url('/m6x11.ttf') format('truetype');
@@ -13,6 +15,24 @@
   --color-hearts: rgb(248, 59, 47);
   --color-clubs: rgb(0, 156, 253);
   --color-diamonds: rgb(255, 163, 0);
+
+  --animate-up-down-bounce: up-down-bounce 1s ease-in-out infinite;
+  @keyframes up-down-bounce {
+    0%,
+    100% {
+      transform: translateY(3%);
+    }
+    50% {
+      transform: translateY(-5%);
+    }
+  }
+
+  --animate-rainbow-shift: rainbow-shift 10s linear infinite;
+  @keyframes rainbow-shift {
+    to {
+      background-position: var(--bg-clip-size) 0;
+    }
+  }
 }
 
 body {
