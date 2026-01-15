@@ -11,7 +11,7 @@
     >
       <JokerCard :joker-x="jokerX" :joker-y="jokerY" />
     </a>
-    <label class="text-center block" :for="identifier" :id="`${identifier}-label`">{{
+    <label class="block text-center" :for="identifier" :id="`${identifier}-label`">{{
       name
     }}</label>
   </div>

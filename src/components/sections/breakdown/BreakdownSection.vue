@@ -5,7 +5,7 @@
       <p>Your ranks:</p>
       <p>
         <template v-for="([suit, rank], index) in qualifyingStraightHand" :key="rank">
-          <span class="font-bold text-lg tracking-tight" :class="[getSuitColor(suit)]">
+          <span class="text-lg font-bold tracking-tight" :class="[getSuitColor(suit)]">
             {{ getSuitSymbol(suit) }}
             {{ getRankLabel(rank) }}
           </span>
@@ -23,7 +23,7 @@
         </template>
       </p>
       <p v-if="isUsingShortcut" class="text-xs">
-        Shortcut enabled: <span class="text-green-400 font-bold">-></span> allows you to skip one
+        Shortcut enabled: <span class="font-bold text-green-400">-></span> allows you to skip one
         rank
       </p>
       <p v-if="isUsingFourFingers" class="text-xs">
@@ -32,9 +32,9 @@
     </template>
     <template v-if="isHandFlush">
       <p class="mt-4">Your suits:</p>
-      <ul class="flex gap-4 justify-center">
+      <ul class="flex justify-center gap-4">
         <template v-for="[suit, rank] in suitSortedHand" :key="rank">
-          <li class="font-bold text-lg" :class="[getSuitColor(suit)]">
+          <li class="text-lg font-bold" :class="[getSuitColor(suit)]">
             {{ getSuitSymbol(suit) }}
           </li>
         </template>

@@ -1,8 +1,8 @@
 <template>
-  <li class="perspective-distant flex justify-center">
+  <li class="flex justify-center perspective-distant">
     <div
       ref="cardContainer"
-      class="aspect-3/4 rounded-lg shadow-md border border-gray-300 hover:scale-110 transition-transform rotate-x-(--rotate-x) rotate-y-(--rotate-y) cursor-pointer relative w-20 bg-(image:--bg-url) bg-position-(--bg-position) bg-no-repeat bg-(color:white) [image-rendering:pixelated] bg-white bg-size-(--bg-size)"
+      class="bg-(color:white) relative aspect-3/4 w-20 rotate-x-(--rotate-x) rotate-y-(--rotate-y) cursor-pointer rounded-lg border border-gray-300 bg-white bg-(image:--bg-url) bg-size-(--bg-size) bg-position-(--bg-position) bg-no-repeat shadow-md transition-transform [image-rendering:pixelated] hover:scale-110"
       :class="[cardColor]"
       :style="{
         '--tw-rotate-x': `rotateX(${roll}deg)`,

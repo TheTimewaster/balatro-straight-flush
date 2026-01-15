@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
-import DeckGrid from './components/sections/deck/DeckGrid.vue'
-import useIsHandFlush from './composables/hands/useIsHandFlush'
-import useIsHandStraight from './composables/hands/useIsHandStraight'
-import useJokerState from './composables/useJokerState'
-import PlayingHandRow from './components/hand/HandRow.vue'
-import { PokerHandType, type PlayingHand } from './types'
-import getPokerHandLabel from './utils/getPokerHandLabel'
-import useIsHandSameRankHands from './composables/hands/useIsHandSameRankHands'
+import PlayingHandRow from '@/components/hand/HandRow.vue'
+import BreakdownSection from '@/components/sections/breakdown/BreakdownSection.vue'
+import DeckGrid from '@/components/sections/deck/DeckGrid.vue'
+import JokersSection from '@/components/sections/jokers/JokersSection.vue'
+import useIsHandFlush from '@/composables/hands/useIsHandFlush'
+import useIsHandSameRankHands from '@/composables/hands/useIsHandSameRankHands'
+import useIsHandStraight from '@/composables/hands/useIsHandStraight'
+import useJokerState from '@/composables/useJokerState'
+import { PokerHandType, type PlayingHand } from '@/types'
+import getPokerHandLabel from '@/utils/getPokerHandLabel'
 import { useDark, useUrlSearchParams } from '@vueuse/core'
-import BreakdownSection from './components/sections/breakdown/BreakdownSection.vue'
-import JokersSection from './components/sections/jokers/JokersSection.vue'
+import { computed, onMounted, ref, watch } from 'vue'
 
 const isDark = useDark()
 
@@ -112,28 +112,28 @@ onMounted(() => {
 
 <template>
   <button
-    class="fixed bottom-2 right-2 w-12 h-12 text-center rounded-full bg-gray-300 hover:bg-gray-400 transition-colors flex items-center justify-center overflow-hidden cursor-pointer"
+    class="fixed right-2 bottom-2 flex h-12 w-12 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-gray-300 text-center transition-colors hover:bg-gray-400"
     @click="isDark = !isDark"
   >
     <Transition
-      enter-active-class="transition-all absolute"
+      enter-active-class="absolute transition-all"
       enter-from-class="opacity-0"
       enter-to-class="opacity-100"
-      leave-active-class="transition-all absolute"
+      leave-active-class="absolute transition-all"
       leave-from-class="opacity-100"
       leave-to-class="opacity-0"
       mode="out-in"
     >
-      <span v-if="isDark" class="text-2xl inline-block">🌙</span>
-      <span v-else class="text-2xl inline-block mt-1">☀️</span>
+      <span v-if="isDark" class="inline-block text-2xl">🌙</span>
+      <span v-else class="mt-1 inline-block text-2xl">☀️</span>
     </Transition>
   </button>
-  <div class="max-w-3/5 mx-auto my-8">
+  <div class="mx-auto my-8 max-w-3/5">
     <JokersSection class="mt-8" :playing-hand="playingHand" />
 
-    <section class="text-center mt-8">
+    <section class="mt-8 text-center">
       <h2 class="text-xl font-bold">Your Playing Hand</h2>
-      <PlayingHandRow class="w-2/3 mx-auto mt-4" v-model="playingHand" />
+      <PlayingHandRow class="mx-auto mt-4 w-2/3" v-model="playingHand" />
       <div class="mt-4">
         Your playing hand is
 
@@ -143,7 +143,7 @@ onMounted(() => {
           a
 
           <div
-            class="text-xl text-transparent bg-size-[var(--bg-clip-size)_100%] bg-linear-to-r from-purple-400 via-pink-500 to-purple-400 bg-clip-text font-extrabold inline-block animate-rainbow-shift"
+            class="inline-block animate-rainbow-shift bg-linear-to-r from-purple-400 via-pink-500 to-purple-400 bg-size-[var(--bg-clip-size)_100%] bg-clip-text text-xl font-extrabold text-transparent"
             style="--bg-clip-size: 400%"
           >
             <span

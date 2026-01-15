@@ -1,0 +1,19 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "semi": false,
+  "singleQuote": true,
+  "printWidth": 100,
+  "experimentalTailwindcss": {
+    "functions": ["tw"],
+    "attributes": [
+      "enter-from-class",
+      "enter-to-class",
+      "enter-active-class",
+      "leave-from-class",
+      "leave-active-class",
+      "leave-to-class"
+    ],
+    "stylesheet": "./src/input.css"
+  },
+  "ignorePatterns": []
+}

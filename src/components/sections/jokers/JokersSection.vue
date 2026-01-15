@@ -1,11 +1,11 @@
 <template>
   <section>
-    <h2 class="text-center mt-8 text-xl font-bold">Your Jokers</h2>
-    <p class="text-xs text-center">
+    <h2 class="mt-8 text-center text-xl font-bold">Your Jokers</h2>
+    <p class="text-center text-xs">
       Some jokers can help to create hands more easily. Toggle them on or off to see how they affect
       your hand.
     </p>
-    <div class="mt-4 flex gap-4 justify-center">
+    <div class="mt-4 flex justify-center gap-4">
       <!-- four fingers -->
       <JokerItem
         v-model="isUsingFourFingers"

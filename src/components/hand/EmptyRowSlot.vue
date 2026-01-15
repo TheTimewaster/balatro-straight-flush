@@ -1,6 +1,6 @@
 <template>
   <li
-    class="aspect-2/3 bg-gray-300 rounded-lg border border-gray-400 rotate-(--card-rotate) translate-y-(--card-translate-y) origin-top"
+    class="aspect-2/3 origin-top translate-y-(--card-translate-y) rotate-(--card-rotate) rounded-lg border border-gray-400 bg-gray-300"
     :key="`empty-slot-${index}`"
     :style="{
       ['--card-rotate']: `${(index - 2) * 4}deg`,

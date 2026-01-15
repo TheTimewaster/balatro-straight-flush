@@ -14,9 +14,9 @@
           @card-clicked="handleCardClicked(index)"
         />
 
-        <li v-else class="perspective-distant flex justify-center" :key="`empty-slot-${index}`">
+        <li v-else class="flex justify-center perspective-distant" :key="`empty-slot-${index}`">
           <div
-            class="aspect-3/4 bg-gray-300 rounded-lg border border-gray-400 w-20"
+            class="aspect-3/4 w-20 rounded-lg border border-gray-400 bg-gray-300"
             :class="slotTransformClasses"
             :style="{
               ...slotTranformStyle(index),
@@ -26,16 +26,16 @@
       </template>
     </ul>
 
-    <h3 class="text-center mt-4">Sort by</h3>
-    <div class="flex gap-4 justify-center mt-4">
+    <h3 class="mt-4 text-center">Sort by</h3>
+    <div class="mt-4 flex justify-center gap-4">
       <button
-        class="px-4 py-2 rounded-lg bg-gray-300 font-bold cursor-pointer hover:bg-gray-400 transition-colors dark:text-indigo-950"
+        class="cursor-pointer rounded-lg bg-gray-300 px-4 py-2 font-bold transition-colors hover:bg-gray-400 dark:text-indigo-950"
         @click="() => sortBy(SortCriteria.Suit)"
       >
         Suit
       </button>
       <button
-        class="px-4 py-2 rounded-lg bg-gray-300 font-bold cursor-pointer hover:bg-gray-400 transition-colors dark:text-indigo-950"
+        class="cursor-pointer rounded-lg bg-gray-300 px-4 py-2 font-bold transition-colors hover:bg-gray-400 dark:text-indigo-950"
         @click="() => sortBy(SortCriteria.Rank)"
       >
         Rank
@@ -91,7 +91,7 @@ const sortBy = (criteria: SortCriteria) => {
   playingHand.value = sortedHand
 }
 
-const slotTransformClasses = tw`rotate-(--card-rotate) translate-y-(--card-translate-y) origin-(--transform-origin)`
+const slotTransformClasses = tw`origin-(--transform-origin) translate-y-(--card-translate-y) rotate-(--card-rotate)`
 
 const slotTranformStyle = (index: number) => {
   const offset = index - 2
