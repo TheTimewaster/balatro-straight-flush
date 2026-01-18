@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import PlayingHandRow from '@/components/hand/HandRow.vue'
 import BreakdownSection from '@/components/sections/breakdown/BreakdownSection.vue'
 import DeckGrid from '@/components/sections/deck/DeckGrid.vue'
 import JokersSection from '@/components/sections/jokers/JokersSection.vue'
@@ -8,12 +7,11 @@ import useIsHandSameRankHands from '@/composables/hands/useIsHandSameRankHands'
 import useIsHandStraight from '@/composables/hands/useIsHandStraight'
 import useJokerState from '@/composables/useJokerState'
 import { PokerHandType, type PlayingHand } from '@/types'
-import getPokerHandLabel from '@/utils/getPokerHandLabel'
 import { useDark, useUrlSearchParams } from '@vueuse/core'
 import { computed, onMounted, ref, watch } from 'vue'
+import HandSection from './components/hand/HandSection.vue'
 
 const isDark = useDark()
-
 const playingHand = ref<PlayingHand>([])
 
 const { isUsingFourFingers, isUsingShortcut, isUsingSmearedJoker } = useJokerState()
@@ -131,40 +129,7 @@ onMounted(() => {
   <div class="mx-auto my-8 max-w-3/5">
     <JokersSection class="mt-8" :playing-hand="playingHand" />
 
-    <section class="mt-8 text-center">
-      <h2 class="text-xl font-bold">Your Playing Hand</h2>
-      <PlayingHandRow class="mx-auto mt-4 w-2/3" v-model="playingHand" />
-      <div class="mt-4">
-        Your playing hand is
-
-        <span v-if="handType === PokerHandType.EmptyHand"> empty </span>
-
-        <template v-else>
-          a
-
-          <div
-            class="inline-block animate-rainbow-shift bg-linear-to-r from-purple-400 via-pink-500 to-purple-400 bg-size-[var(--bg-clip-size)_100%] bg-clip-text text-xl font-extrabold text-transparent"
-            style="--bg-clip-size: 400%"
-          >
-            <span
-              v-for="(letter, index) in getPokerHandLabel(handType).split('')"
-              class="inline-block"
-              :class="{
-                'animate-up-down-bounce [animation-delay:var(--up-down-bounce-delay)]':
-                  letter !== ' ',
-              }"
-              :style="{
-                '--up-down-bounce-delay': `${(index % 2) * 500}ms`,
-              }"
-              :key="`${letter}-${index}`"
-            >
-              <template v-if="letter === ' '">&nbsp;</template>
-              <template v-else>{{ letter }}</template>
-            </span>
-          </div>
-        </template>
-      </div>
-    </section>
+    <HandSection :hand-type="handType" v-model="playingHand" />
 
     <BreakdownSection
       v-if="handType !== PokerHandType.HighCard"
