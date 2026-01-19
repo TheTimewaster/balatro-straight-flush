@@ -1,6 +1,6 @@
 <template>
   <div>
-    <input class="hidden" type="checkbox" :id="identifier" :value="isToggled" />
+    <input :id="identifier" class="hidden" type="checkbox" :value="isToggled" />
     <a
       class="block perspective-distant"
       :class="{
@@ -11,7 +11,7 @@
     >
       <JokerCard :joker-x="jokerX" :joker-y="jokerY" />
     </a>
-    <label class="block text-center" :for="identifier" :id="`${identifier}-label`">{{
+    <label :id="`${identifier}-label`" class="block text-center" :for="identifier">{{
       name
     }}</label>
   </div>

@@ -14,7 +14,7 @@
           @card-clicked="handleCardClicked(index)"
         />
 
-        <li v-else class="flex justify-center perspective-distant" :key="`empty-slot-${index}`">
+        <li v-else :key="`empty-slot-${index}`" class="flex justify-center perspective-distant">
           <div
             class="aspect-3/4 w-20 rounded-lg border border-gray-400 bg-gray-300"
             :class="slotTransformClasses"

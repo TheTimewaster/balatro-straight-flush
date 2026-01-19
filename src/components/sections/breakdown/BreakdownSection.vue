@@ -11,11 +11,11 @@
           </span>
           <template v-if="qualifyingStraightHand[index + 1] != null">
             <span
+              :key="`arrow-${index}`"
               class="font-bold"
               :class="{
                 ['text-green-400']: qualifyingStraightHand[index + 1]?.[1] === rank + 2,
               }"
-              :key="`arrow-${index}`"
             >
               ->
             </span>

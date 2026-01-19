@@ -27,8 +27,8 @@
       <JokerItem
         v-model="isUsingSmearedJoker"
         identifier="SmearedJoker"
-        name="Smeared Joker"
         :joker-x="4"
+        name="Smeared Joker"
         :joker-y="6"
       />
     </div>

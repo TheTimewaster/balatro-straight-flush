@@ -5,6 +5,7 @@
   >
     <span
       v-for="({ character, index }, charIndex) in pokerHandSplitText"
+      :key="`${character}-${charIndex}`"
       class="inline-block"
       :class="{
         'animate-up-down-bounce [animation-delay:var(--up-down-bounce-delay)]': index !== -1,
@@ -12,7 +13,6 @@
       :style="{
         '--up-down-bounce-delay': `${(index % 2) * 500}ms`,
       }"
-      :key="`${character}-${charIndex}`"
     >
       <template v-if="index === -1">&nbsp;</template>
       <template v-else>{{ character }}</template>

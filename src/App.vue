@@ -129,7 +129,7 @@ onMounted(() => {
   <div class="mx-auto my-8 max-w-3/5">
     <JokersSection class="mt-8" :playing-hand="playingHand" />
 
-    <HandSection :hand-type="handType" v-model="playingHand" />
+    <HandSection v-model="playingHand" :hand-type="handType" />
 
     <BreakdownSection
       v-if="handType !== PokerHandType.HighCard"
@@ -143,7 +143,7 @@ onMounted(() => {
 
     <section class="mt-8">
       <h2 class="text-center text-xl font-bold">Deck</h2>
-      <DeckGrid class="mt-4" v-model="playingHand" />
+      <DeckGrid v-model="playingHand" class="mt-4" />
     </section>
   </div>
 </template>
