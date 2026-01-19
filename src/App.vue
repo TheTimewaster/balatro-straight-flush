@@ -80,7 +80,12 @@ watch(isUsingSmearedJoker, (newVal) => {
   params['smeared-joker'] = newVal ? '1' : '0'
 })
 watch(playingHand, (newHand) => {
-  const handParam = newHand.map(([suit, rank]) => `${suit}-${rank}`).join(',')
+  const handParam = newHand
+    .map(
+      ([suit, rank, isWildcardEnabled, isDebuffed]) =>
+        `${suit}-${rank}-${isWildcardEnabled ? 1 : 0}-${isDebuffed ? 1 : 0}`,
+    )
+    .join(',')
   params['hand'] = handParam
 })
 
@@ -88,11 +93,19 @@ onMounted(() => {
   const handParam = params['hand'] as string | undefined
   if (handParam) {
     const cards = handParam.split(',').map((pair) => {
-      const [suitStr, rankStr] = pair.split('-')
-      return [Number(suitStr), Number(rankStr)] as [number, number]
+      const [suitStr, rankStr, isWildcardEnabledStr, isDebuffedStr] = pair.split('-')
+      return [
+        Number(suitStr),
+        Number(rankStr),
+        isWildcardEnabledStr === '1',
+        isDebuffedStr === '1',
+      ] as [number, number, boolean, boolean]
     })
 
-    playingHand.value = cards.map(([suit, rank]) => [suit, rank, false, false] as PlayingHandCard)
+    playingHand.value = cards.map(
+      ([suit, rank, isWildcardEnabled, isDebuffed]) =>
+        [suit, rank, isWildcardEnabled, isDebuffed] as PlayingHandCard,
+    )
   } else {
     playingHand.value = []
   }
