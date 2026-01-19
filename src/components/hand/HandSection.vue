@@ -1,7 +1,7 @@
 <template>
   <section class="mt-8 text-center">
     <h2 class="text-xl font-bold">Your Playing Hand</h2>
-    <HandRow v-model="playingHand" class="mx-auto mt-4 w-2/3" />
+    <HandRow v-model="playingHand" class="mx-auto mt-4 lg:w-2/3" />
     <div class="mt-4">
       Your playing hand is
 

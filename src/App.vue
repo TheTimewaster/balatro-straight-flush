@@ -6,7 +6,7 @@ import useIsHandFlush from '@/composables/hands/useIsHandFlush'
 import useIsHandSameRankHands from '@/composables/hands/useIsHandSameRankHands'
 import useIsHandStraight from '@/composables/hands/useIsHandStraight'
 import useJokerState from '@/composables/useJokerState'
-import { PokerHandType, type PlayingHand } from '@/types'
+import { PokerHandType, type PlayingHand, type PlayingHandCard } from '@/types'
 import { useDark, useUrlSearchParams } from '@vueuse/core'
 import { computed, onMounted, ref, watch } from 'vue'
 import HandSection from './components/hand/HandSection.vue'
@@ -43,27 +43,22 @@ const { pokerHand } = useIsHandSameRankHands(rankSortedHand)
 const handType = computed(() => {
   const handType = pokerHand.value
 
-  if (handType !== PokerHandType.HighCard) {
-    if (isHandFlush.value) {
-      // special case: Flush House
-      if (handType === PokerHandType.FullHouse) {
-        return PokerHandType.FlushHouse
-      }
-
-      // special case: Flush Five
-      if (handType === PokerHandType.FiveOfAKind) {
-        return PokerHandType.FlushFive
-      }
+  if (isHandFlush.value) {
+    // special case: Flush House
+    if (handType === PokerHandType.FullHouse) {
+      return PokerHandType.FlushHouse
     }
 
-    return handType
-  }
+    // special case: Flush Five
+    if (handType === PokerHandType.FiveOfAKind) {
+      return PokerHandType.FlushFive
+    }
 
-  if (isHandFlush.value && isHandStraight.value) {
-    return PokerHandType.StraightFlush
-  }
+    // special case: Straight Flush
+    if (isHandStraight.value) {
+      return PokerHandType.StraightFlush
+    }
 
-  if (isHandFlush.value) {
     return PokerHandType.Flush
   }
 
@@ -71,7 +66,7 @@ const handType = computed(() => {
     return PokerHandType.Straight
   }
 
-  return PokerHandType.HighCard
+  return handType
 })
 
 const params = useUrlSearchParams('hash')
@@ -97,7 +92,7 @@ onMounted(() => {
       return [Number(suitStr), Number(rankStr)] as [number, number]
     })
 
-    playingHand.value = cards
+    playingHand.value = cards.map(([suit, rank]) => [suit, rank, false, false] as PlayingHandCard)
   } else {
     playingHand.value = []
   }
@@ -126,7 +121,7 @@ onMounted(() => {
       <span v-else class="mt-1 inline-block text-2xl">☀️</span>
     </Transition>
   </button>
-  <div class="mx-auto my-8 max-w-3/5">
+  <div class="mx-auto my-8 px-8 md:max-w-4/5 lg:max-w-3/5 lg:px-0">
     <JokersSection class="mt-8" :playing-hand="playingHand" />
 
     <HandSection v-model="playingHand" :hand-type="handType" />

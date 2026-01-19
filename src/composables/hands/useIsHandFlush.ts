@@ -27,9 +27,19 @@ export default (
 
     const suitCardCount = new Map<CardSuit, number>(m)
 
-    playingHandRaw.forEach(([suit]) => {
-      const currentCount = suitCardCount.get(suit) ?? 0
-      suitCardCount.set(suit, currentCount + 1)
+    playingHandRaw.forEach(([suit, _, isWildcardEnabled, isDebuffed]) => {
+      if (!isDebuffed) {
+        const currentCount = suitCardCount.get(suit) ?? 0
+        suitCardCount.set(suit, currentCount + 1)
+      }
+
+      // once a card is a wild card, every suit gets +1 count
+      if (isWildcardEnabled && !isDebuffed) {
+        suitCardCount.forEach((_, innerSuit) => {
+          const currentCount = suitCardCount.get(innerSuit) ?? 0
+          suitCardCount.set(innerSuit, currentCount + 1)
+        })
+      }
     })
 
     if (isUsingSmearedJokerRaw) {
@@ -48,7 +58,9 @@ export default (
     }
 
     for (const [, count] of suitCardCount) {
+      console.log(count)
       if (count >= 5 || (isUsingFourFingersRaw && count >= 4)) {
+        console.log('flush found')
         return true
       }
     }

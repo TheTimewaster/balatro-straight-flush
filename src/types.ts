@@ -25,7 +25,10 @@ export enum CardRank {
 }
 
 export type PlayingCard = [CardSuit, CardRank | LowAce]
-export type PlayingHand = Array<PlayingCard>
+export type IsWildcardEnabled = boolean
+export type IsDebuffed = boolean
+export type PlayingHandCard = [...PlayingCard, IsWildcardEnabled, IsDebuffed]
+export type PlayingHand = Array<PlayingHandCard>
 
 /**
  * Poker hand types in increasing order of rank.

@@ -2,26 +2,20 @@
   <div>
     <ul class="grid grid-cols-5 gap-4">
       <template v-for="(slot, index) in playingHandSlots">
-        <PlayingCard
+        <HandCard
           v-if="slot != null"
           :key="`${slot[0]}-${slot[1]}-${index}`"
           :suit="slot[0]"
           :rank="slot[1]"
-          :class="slotTransformClasses"
-          :style="{
-            ...slotTranformStyle(index),
-          }"
+          :is-wildcard-enabled="playingHand[index]?.[2]"
+          :is-debuffed="playingHand[index]?.[3]"
           @card-clicked="handleCardClicked(index)"
+          @update:is-wildcard-enabled="() => handleWildcardToggle(index)"
+          @update:is-debuffed="() => handleDebuffToggle(index)"
         />
 
-        <li v-else :key="`empty-slot-${index}`" class="flex justify-center perspective-distant">
-          <div
-            class="aspect-3/4 w-20 rounded-lg border border-gray-400 bg-gray-300"
-            :class="slotTransformClasses"
-            :style="{
-              ...slotTranformStyle(index),
-            }"
-          ></div>
+        <li v-else :key="`empty-slot-${index}`" class="flex items-start justify-center">
+          <div class="aspect-3/4 w-20 rounded-lg border border-gray-400 bg-gray-300"></div>
         </li>
       </template>
     </ul>
@@ -45,10 +39,9 @@
 </template>
 
 <script setup lang="ts">
-import PlayingCard from '@/components/PlayingCard.vue'
 import type { PlayingHand } from '@/types'
-import tw from '@/utils/tw'
 import { computed } from 'vue'
+import HandCard from './HandCard.vue'
 
 const playingHand = defineModel<PlayingHand>({ default: () => [] })
 
@@ -61,6 +54,22 @@ const playingHandSlots = computed(() => {
 
   return slots
 })
+
+const handleWildcardToggle = (index: number) => {
+  const newHand = [...playingHand.value]
+  if (newHand[index]) {
+    newHand[index][2] = !newHand[index][2]
+    playingHand.value = newHand
+  }
+}
+
+const handleDebuffToggle = (index: number) => {
+  const newHand = [...playingHand.value]
+  if (newHand[index]) {
+    newHand[index][3] = !newHand[index][3]
+    playingHand.value = newHand
+  }
+}
 
 const handleCardClicked = (index: number) => {
   const newHand = [...playingHand.value]
@@ -89,26 +98,6 @@ const sortBy = (criteria: SortCriteria) => {
   })
 
   playingHand.value = sortedHand
-}
-
-const slotTransformClasses = tw`origin-(--transform-origin) translate-y-(--card-translate-y) rotate-(--card-rotate)`
-
-const slotTranformStyle = (index: number) => {
-  const offset = index - 2
-  const rotationStep = 5 // degrees
-  const rotation = offset * rotationStep
-
-  // Calculate Y translation to create a circular arc
-  // We simulate a large circle with radius R below the cards
-  const radius = 1000
-  const angleRad = (Math.abs(rotation) * Math.PI) / 180
-  const translateY = radius * (1 - Math.cos(angleRad))
-
-  return {
-    '--card-rotate': `${rotation}deg`,
-    '--card-translate-y': `${translateY}px`,
-    '--transform-origin': 'bottom center',
-  }
 }
 </script>
 
