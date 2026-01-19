@@ -1,4 +1,4 @@
-import { CardRank, type PlayingCard, type PlayingHand } from '@/types'
+import { CardRank, type PlayingHand, type PlayingHandCard } from '@/types'
 import { computed, reactive, toRefs, unref, watch, type MaybeRefOrGetter } from 'vue'
 
 export default (
@@ -32,17 +32,17 @@ export default (
     lastCardIndex: number,
     isLowStraight = false,
   ) => {
-    const [suit, currentRank] = rankSortedHand.value[currentCardIndex] as PlayingCard
+    const [suit, currentRank] = rankSortedHand.value[currentCardIndex] as PlayingHandCard
     const isUsingShortcutRaw = unref(isUsingShortcut)
 
     // end of recursion
     if (currentCardIndex === lastCardIndex - 1) {
       if (isLowStraight && currentRank === CardRank.Ace) {
         // put Ace as low card
-        state.qualifyingStraightHand.unshift([suit, 1])
+        state.qualifyingStraightHand.unshift([suit, 1, false, false])
       } else {
         // add last card to qualifying hand
-        state.qualifyingStraightHand.push([suit, currentRank])
+        state.qualifyingStraightHand.push([suit, currentRank, false, false])
       }
 
       return true
@@ -52,7 +52,7 @@ export default (
       return false
     }
 
-    const [, nextRank] = rankSortedHand.value[currentCardIndex + 1] as PlayingCard
+    const [, nextRank] = rankSortedHand.value[currentCardIndex + 1] as PlayingHandCard
 
     let isConsecutive = false
     if (isUsingShortcutRaw) {
@@ -65,14 +65,14 @@ export default (
       // special case: we have to validate low straights beginning with Ace
       // we look back at the first card to see if it's a 2
       if (rankSortedHand.value[0][1] === CardRank.Two) {
-        state.qualifyingStraightHand.push([suit, currentRank])
+        state.qualifyingStraightHand.push([suit, currentRank, false, false])
 
         return evaluateCardRank(currentCardIndex + 1, lastCardIndex, true)
       }
 
       // special case: when using shortcut, after Ace we can consider 3 as consecutive to Ace
       if (isUsingShortcutRaw && rankSortedHand.value[0][1] === CardRank.Three) {
-        state.qualifyingStraightHand.push([suit, currentRank])
+        state.qualifyingStraightHand.push([suit, currentRank, false, false])
 
         return evaluateCardRank(currentCardIndex + 1, lastCardIndex, true)
       }
@@ -80,7 +80,7 @@ export default (
 
     // consecutive, add to qualifying hand and continue recursion
     if (isConsecutive) {
-      state.qualifyingStraightHand.push([suit, currentRank])
+      state.qualifyingStraightHand.push([suit, currentRank, false, false])
       return evaluateCardRank(currentCardIndex + 1, lastCardIndex)
     }
 

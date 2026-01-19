@@ -6,7 +6,7 @@ export default (rankSortedHand: MaybeRefOrGetter<PlayingHand>) => {
     const rankSortedHandRaw = unref(rankSortedHand)
     const newMap = new Map<CardRank, number>()
 
-    for (const [, rank] of rankSortedHandRaw as [CardSuit, CardRank][]) {
+    for (const [, rank] of rankSortedHandRaw as [CardSuit, CardRank, boolean, boolean][]) {
       const currentCount = newMap.get(rank) ?? 0
       newMap.set(rank, currentCount + 1)
     }
