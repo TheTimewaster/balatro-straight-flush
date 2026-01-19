@@ -7,30 +7,11 @@
     </p>
     <div class="mt-4 flex justify-center gap-4">
       <!-- four fingers -->
-      <JokerItem
-        v-model="isUsingFourFingers"
-        identifier="FourFingers"
-        name="Four Fingers"
-        :joker-x="6"
-        :joker-y="6"
-      />
+      <JokerItem v-model="isUsingFourFingers" v-bind="fourFingersJoker" />
       <!-- shortcut -->
-      <JokerItem
-        v-model="isUsingShortcut"
-        identifier="Shortcut"
-        name="Shortcut"
-        :joker-x="3"
-        :joker-y="12"
-      />
-
+      <JokerItem v-model="isUsingShortcut" v-bind="shortcutJoker" />
       <!-- smeared joker -->
-      <JokerItem
-        v-model="isUsingSmearedJoker"
-        identifier="SmearedJoker"
-        :joker-x="4"
-        name="Smeared Joker"
-        :joker-y="6"
-      />
+      <JokerItem v-model="isUsingSmearedJoker" v-bind="smearedJoker" />
     </div>
   </section>
 </template>
@@ -38,8 +19,21 @@
 <script setup lang="ts">
 import useJokerState from '@/composables/useJokerState'
 import JokerItem from './JokerItem.vue'
+import { computed } from 'vue'
+import { HAND_MODIFYING_JOKERS } from '@/components/data/HandModifyingJokers'
+import type { Joker } from '@/types'
 
 const { isUsingFourFingers, isUsingShortcut, isUsingSmearedJoker } = useJokerState()
+
+const fourFingersJoker = computed(
+  () => HAND_MODIFYING_JOKERS.find((joker) => joker.identifier === 'FourFingers') as Joker,
+)
+const shortcutJoker = computed(
+  () => HAND_MODIFYING_JOKERS.find((joker) => joker.identifier === 'Shortcut') as Joker,
+)
+const smearedJoker = computed(
+  () => HAND_MODIFYING_JOKERS.find((joker) => joker.identifier === 'SmearedJoker') as Joker,
+)
 </script>
 
 <style scoped></style>

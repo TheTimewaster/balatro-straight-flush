@@ -50,3 +50,34 @@ export enum PokerHandType {
   FlushHouse = 11,
   FlushFive = 12,
 }
+
+export type JokerDescriptionFormattedPart = {
+  text: string
+}
+
+export type JokerDescriptionHighlightedPart = {
+  highlighted: boolean
+} & JokerDescriptionFormattedPart
+
+export type JokerDescriptionMutedPart = {
+  muted: boolean
+  text: Array<string | JokerDescriptionHighlightedPart>
+}
+
+export type JokerDescriptionSuitPart = {
+  suit: CardSuit
+} & JokerDescriptionFormattedPart
+
+export type JokerDescriptionPart =
+  | string
+  | JokerDescriptionHighlightedPart
+  | JokerDescriptionMutedPart
+  | JokerDescriptionSuitPart
+
+export type Joker = {
+  identifier: string
+  name: string
+  description: Array<JokerDescriptionPart>
+  spriteX: number
+  spriteY: number
+}

@@ -1,7 +1,7 @@
 <template>
   <div
     ref="cardContainer"
-    class="bg-(color:white) relative aspect-3/4 w-20 rotate-x-(--rotate-x) rotate-y-(--rotate-y) cursor-pointer rounded-lg border border-gray-300 bg-white bg-(image:--bg-url) bg-size-(--bg-size) bg-position-(--bg-position) bg-no-repeat shadow-md transition-transform [image-rendering:pixelated] hover:scale-110"
+    class="relative aspect-3/4 w-20 rotate-x-(--rotate-x) rotate-y-(--rotate-y) cursor-pointer rounded-lg bg-transparent bg-(image:--bg-url) bg-size-(--bg-size) bg-position-(--bg-position) bg-no-repeat shadow-md transition-transform [image-rendering:pixelated] hover:scale-110"
     :style="{
       '--tw-rotate-x': `rotateX(${roll}deg)`,
       '--tw-rotate-y': `rotateY(${tilt}deg)`,

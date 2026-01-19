@@ -132,7 +132,7 @@ onMounted(() => {
     <HandSection v-model="playingHand" :hand-type="handType" />
 
     <BreakdownSection
-      v-if="handType !== PokerHandType.HighCard"
+      v-if="handType !== PokerHandType.EmptyHand && handType !== PokerHandType.HighCard"
       class="mt-4 text-center"
       :hand-type="handType"
       :is-hand-straight="isHandStraight"
