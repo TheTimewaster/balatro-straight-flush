@@ -11,32 +11,17 @@ import { useDark, useUrlSearchParams } from '@vueuse/core'
 import { computed, onMounted, ref, watch } from 'vue'
 import HandSection from './components/hand/HandSection.vue'
 
-const isDark = useDark()
+const isDark = useDark({
+  // BY DEFAULT, isDark disables transitions to avoid a flash of unstyled content
+  disableTransition: false,
+})
 const playingHand = ref<PlayingHand>([])
 
 const { isUsingFourFingers, isUsingShortcut, isUsingSmearedJoker } = useJokerState()
 
-const isQualifyingForEvaluation = computed((): boolean => {
-  if (isUsingFourFingers.value) {
-    return playingHand.value.length >= 4
-  }
+const { isHandStraight, qualifyingStraightHand, rankSortedHand } = useIsHandStraight(playingHand)
 
-  return playingHand.value.length >= 5
-})
-
-const { isHandStraight, qualifyingStraightHand, rankSortedHand } = useIsHandStraight(
-  playingHand,
-  isQualifyingForEvaluation,
-  isUsingFourFingers,
-  isUsingShortcut,
-)
-
-const { isHandFlush, suitSortedHand } = useIsHandFlush(
-  playingHand,
-  isQualifyingForEvaluation,
-  isUsingSmearedJoker,
-  isUsingFourFingers,
-)
+const { isHandFlush, suitSortedHand } = useIsHandFlush(playingHand)
 
 const { pokerHand } = useIsHandSameRankHands(rankSortedHand)
 
@@ -117,23 +102,38 @@ onMounted(() => {
 </script>
 
 <template>
-  <button
-    class="fixed right-2 bottom-2 flex h-12 w-12 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-gray-300 text-center transition-colors hover:bg-gray-400"
-    @click="isDark = !isDark"
-  >
-    <Transition
-      enter-active-class="absolute transition-all"
-      enter-from-class="opacity-0"
-      enter-to-class="opacity-100"
-      leave-active-class="absolute transition-all"
-      leave-from-class="opacity-100"
-      leave-to-class="opacity-0"
-      mode="out-in"
+  <div class="fixed right-2 bottom-2 z-10 p-2">
+    <button
+      class="relative block h-7 w-12 cursor-pointer rounded-full border-2 border-gray-300 bg-amber-300 text-red-950 transition-all duration-1000 hover:border-gray-300"
+      :class="{
+        'bg-indigo-600 text-white': isDark,
+      }"
+      @click="isDark = !isDark"
     >
-      <span v-if="isDark" class="inline-block text-2xl">🌙</span>
-      <span v-else class="mt-1 inline-block text-2xl">☀️</span>
-    </Transition>
-  </button>
+      <span
+        class="absolute top-0 left-0 block h-6 w-6 overflow-hidden rounded-full bg-gray-100 text-center text-[.75rem] leading-6 transition-all group-hover:bg-white"
+        :class="{
+          'translate-x-5': isDark,
+          'translate-x-0': !isDark,
+        }"
+      >
+        <span class="relative block h-4 w-4">
+          <Transition
+            enter-from-class="opacity-0"
+            enter-active-class="transition-opacity"
+            enter-to-class="opacity-100"
+            leave-from-class="opacity-100"
+            leave-active-class="transition-opacity"
+            leave-to-class="opacity-0"
+            mode="out-in"
+          >
+            <span v-if="isDark" class="absolute top-0 left-1 inline-block h-3 w-3">🌙</span>
+            <span v-else class="absolute top-0 left-1 inline-block h-3 w-3">☀️</span>
+          </Transition>
+        </span>
+      </span>
+    </button>
+  </div>
   <div class="mx-auto my-8 px-8 md:max-w-4/5 lg:max-w-3/5 lg:px-0">
     <JokersSection class="mt-8" :playing-hand="playingHand" />
 
@@ -155,5 +155,3 @@ onMounted(() => {
     </section>
   </div>
 </template>
-
-<style scoped></style>

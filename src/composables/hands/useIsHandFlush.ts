@@ -1,23 +1,21 @@
 import { CardSuit, type PlayingHand } from '@/types'
-import { computed, unref, type MaybeRefOrGetter, type Ref } from 'vue'
+import { computed, unref, type MaybeRefOrGetter } from 'vue'
+import useJokerState from '../useJokerState'
+import useIsQualifyingForStraightOrFlush from './useIsQualifyingForStraightOrFlush'
 
-export default (
-  playingHand: MaybeRefOrGetter<PlayingHand>,
-  isQualifyingForEvaluation: MaybeRefOrGetter<boolean>,
-  isUsingSmearedJoker: Ref<boolean>,
-  isUsingFourFingers: Ref<boolean>,
-) => {
+export default (playingHand: MaybeRefOrGetter<PlayingHand>) => {
+  const { isUsingFourFingers, isUsingSmearedJoker } = useJokerState()
+  const isQualifyingForEvaluation = useIsQualifyingForStraightOrFlush(playingHand)
+
   const suitSortedHand = computed<PlayingHand>(() => {
     const playingHandRaw = unref(playingHand) as PlayingHand
     return [...playingHandRaw].sort((a, b) => a[0] - b[0])
   })
-  const isHandFlush = computed(() => {
-    const isQualifyingForEvaluationRaw = unref(isQualifyingForEvaluation)
-    const playingHandRaw = unref(playingHand) as PlayingHand
-    const isUsingSmearedJokerRaw = unref(isUsingSmearedJoker)
-    const isUsingFourFingersRaw = unref(isUsingFourFingers)
 
-    if (!isQualifyingForEvaluationRaw) {
+  const isHandFlush = computed(() => {
+    const playingHandRaw = unref(playingHand) as PlayingHand
+
+    if (!isQualifyingForEvaluation.value) {
       return false
     }
 
@@ -42,13 +40,13 @@ export default (
       }
     })
 
-    if (isUsingSmearedJokerRaw) {
+    if (isUsingSmearedJoker.value) {
       // since the data is already structured, we can counting from the set directly
       const blackColorCount =
         (suitCardCount.get(CardSuit.Spade) ?? 0) + (suitCardCount.get(CardSuit.Club) ?? 0)
       const redColorCount =
         (suitCardCount.get(CardSuit.Heart) ?? 0) + (suitCardCount.get(CardSuit.Diamond) ?? 0)
-      if (isUsingFourFingersRaw && (blackColorCount >= 4 || redColorCount >= 4)) {
+      if (isUsingFourFingers.value && (blackColorCount >= 4 || redColorCount >= 4)) {
         return true
       }
 
@@ -58,9 +56,7 @@ export default (
     }
 
     for (const [, count] of suitCardCount) {
-      console.log(count)
-      if (count >= 5 || (isUsingFourFingersRaw && count >= 4)) {
-        console.log('flush found')
+      if (count >= 5 || (isUsingFourFingers.value && count >= 4)) {
         return true
       }
     }
